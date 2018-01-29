@@ -3848,6 +3848,12 @@ class SemanticAnalyzerPass2(NodeVisitor[None], SemanticAnalyzerPluginInterface):
             if self.lookup_fully_qualified_or_none(fullname) is None:
                 # Yes. Generate a helpful note.
                 self.add_fixture_note(fullname, ctx)
+        if name in ['Any', 'Callable', 'Dict', 'List', 'Mapping', 'Optional', 'Sequence', 'Tuple',
+                    'TypeVar']:
+            suggestion = 'Did you forget to import "{0}" from typing? (Suggestion: ' \
+                         '"from typing import {0}")'.format(name)
+            self.note(suggestion, ctx)
+
 
     def name_already_defined(self, name: str, ctx: Context,
                              original_ctx: Optional[SymbolTableNode] = None) -> None:
